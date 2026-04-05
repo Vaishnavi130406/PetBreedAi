@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "316811583998",
+    "project_id": "petbreedai",
+    "storage_bucket": "petbreedai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316811583998:android:38199bf23a73291206a0af",
+        "android_client_info": {
+          "package_name": "com.example.final_petbreed_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316811583998-6uih6jnugnd8csjl4anj4uq1a4bbliit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.final_petbreed_ai",
+            "certificate_hash": "245b3099cd7fd403a1807e52191ae4e2ccd078ad"
+          }
+        },
+        {
+          "client_id": "316811583998-kfe5h7a7e6ejv6lc6cvfq8h2d132cjo7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsJsfPAsdF9Lqw9w9aR9Xb-NHr8oANrno"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316811583998-kfe5h7a7e6ejv6lc6cvfq8h2d132cjo7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

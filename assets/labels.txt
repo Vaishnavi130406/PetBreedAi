@@ -1,0 +1,15 @@
+Labrador
+Golden Retriever
+German Shepherd
+Bulldog
+Dachshund
+Persian
+Siamese
+American Short Hair
+British Short Hair
+VanKedisi
+Amazon Green Parrot
+Gray Parrot
+Macaw
+White Parrot
+Turtle
