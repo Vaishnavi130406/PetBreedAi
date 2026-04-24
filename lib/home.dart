@@ -4,34 +4,68 @@ import 'chatbot_page.dart';
 import 'smart_match.dart';
 import 'facts_page.dart';
 import 'dart:ui';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
 class _HomePageState extends State<HomePage> {
   static const Color backgroundColor = Color(0xFFFDF6EC);
   static const Color primary = Color(0xFFF4A261);
   static const Color green = Color(0xFF2A9D8F);
   static const Color brown = Color(0xFF5D4037);
+ 
+  /// ✅ ALL 35 PETS ADDED
   final List<Map<String, String>> pets = [
+    // 🐶 Dogs
     {"name": "Maxi", "breed": "Bulldog", "image": "assets/Bulldog.jpg"},
     {"name": "Rocky", "breed": "Labrador", "image": "assets/Labrador.jpg"},
     {"name": "Luna", "breed": "German Shepherd", "image": "assets/German Shepherd.jpg"},
     {"name": "Bella", "breed": "Golden Retriever", "image": "assets/Golden Retriever.jpg"},
     {"name": "Max", "breed": "Dachshund", "image": "assets/Dachshund.jpg"},
+    {"name": "Coco", "breed": "Poodle", "image": "assets/Poodle.jpg"},
+    {"name": "Jack", "breed": "Jack Russell Terrier", "image": "assets/Jack Russell Terrier.jpg"},
+    {"name": "Bolt", "breed": "Border Collie", "image": "assets/Border Collie.jpg"},
+    {"name": "Bruno", "breed": "Bernese Mountain Dog", "image": "assets/Bernese Mountain Dog.jpg"},
+    {"name": "Choco", "breed": "Chihuahua", "image": "assets/Chihuahua.jpg"},
+    {"name": "Cody", "breed": "Corgi", "image": "assets/Corgi.jpg"},
+
+    // 🐱 Cats
     {"name": "Lola", "breed": "Persian", "image": "assets/persian.jpg"},
     {"name": "Milo", "breed": "Siamese", "image": "assets/Siamese.jpg"},
-    {"name": "Bella (Cat)", "breed": "American Short Hair", "image": "assets/American short hair.jpg"},
+    {"name": "Bella Cat", "breed": "American Short Hair", "image": "assets/American short hair.jpg"},
     {"name": "Buddy", "breed": "British Short Hair", "image": "assets/British short hair.jpg"},
-    {"name": "Charlie", "breed": "Vankedisi", "image": "assets/Vankedisi.jpg"},
-    {"name": "Daisy", "breed": "Amazon Green Parrot", "image": "assets/Amazon Green Parrot.jpg"},
-    {"name": "Evie", "breed": "Gray Parrot", "image": "assets/Gray parrot (28).jpg"},
-    {"name": "Finn", "breed": "Macaw", "image": "assets/macaw (1).jpg"},
-    {"name": "Greta", "breed": "White Parrot", "image": "assets/white parrot (2).jpg"},
+    {"name": "Van", "breed": "Van Kedisi", "image": "assets/VanKedisi.jpg"},
+    {"name": "Leo", "breed": "Maine Coon", "image": "assets/Maine Coon.jpg"},
+    {"name": "Tiger", "breed": "Bengal", "image": "assets/Bengal.jpg"},
+    {"name": "Aby", "breed": "Abyssinian", "image": "assets/Abyssinian.jpg"},
+    {"name": "Sphinx", "breed": "Sphynx", "image": "assets/Sphynx.jpg"},
+    {"name": "Foldy", "breed": "Scottish Fold", "image": "assets/Scottish Fold.jpg"},
+    {"name": "Blue", "breed": "Russian Blue", "image": "assets/Russian Blue.jpg"},
+    {"name": "Exo", "breed": "Exotic Shorthair", "image": "assets/Exotic Shorthair.jpg"},
+    {"name": "Birman", "breed": "Birman", "image": "assets/Birman.jpg"},
+    {"name": "Burmy", "breed": "Burmese", "image": "assets/Burmese.jpg"},
+    {"name": "Hima", "breed": "Himalayan", "image": "assets/Himalayan.jpg"},
+    {"name": "Bombay", "breed": "Bombay", "image": "assets/Bombay.jpg"},
+    {"name": "Forest", "breed": "Norwegian Forest Cat", "image": "assets/Norwegian Forest Cat.jpg"},
+    {"name": "Orient", "breed": "Oriental Shorthair", "image": "assets/Oriental Shorthair.jpg"},
+    {"name": "Devon", "breed": "Devon Rex", "image": "assets/Devon Rex.jpg"},
+
+    // 🦜 Birds
+    {"name": "Rio", "breed": "Amazon Green Parrot", "image": "assets/Amazon Green Parrot.jpg"},
+    {"name": "Grey", "breed": "Gray Parrot", "image": "assets/Gray Parrot.jpg"},
+    {"name": "Mac", "breed": "Macaw", "image": "assets/Macaw.jpg"},
+    {"name": "Snow", "breed": "White Parrot", "image": "assets/White Parrot.jpg"},
+
+    // 🐢 Other
     {"name": "Hank", "breed": "Turtle", "image": "assets/Turtle.jpg"},
   ];
+
   String selectedPet = "Maxi";
+
   @override
   Widget build(BuildContext context) {
     final hour = DateTime.now().hour;
@@ -40,9 +74,12 @@ class _HomePageState extends State<HomePage> {
         : hour < 17
         ? "Good Afternoon 🌤"
         : "Good Evening 🌙";
+
     final today = DateTime.now();
+
     final currentPet =
     pets.firstWhere((pet) => pet["name"] == selectedPet);
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -76,6 +113,8 @@ class _HomePageState extends State<HomePage> {
               style: const TextStyle(color: brown),
             ),
             const SizedBox(height: 25),
+
+            /// 🐾 PET SELECTOR
             Row(
               children: [
                 CircleAvatar(
@@ -90,10 +129,6 @@ class _HomePageState extends State<HomePage> {
                     isExpanded: true,
                     underline: const SizedBox(),
                     dropdownColor: backgroundColor,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: brown,
-                    ),
                     items: pets.map((pet) {
                       return DropdownMenuItem<String>(
                         value: pet["name"],
@@ -111,7 +146,10 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+
             const SizedBox(height: 25),
+
+            /// 🐶 IMAGE CARD
             ClipRRect(
               borderRadius: BorderRadius.circular(25),
               child: Stack(
@@ -150,7 +188,10 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
             const SizedBox(height: 25),
+
+            /// 🔥 QUICK ACTIONS
             GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 15,
@@ -158,36 +199,16 @@ class _HomePageState extends State<HomePage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _quickCard(
-                  context,
-                  "Facts",
-                  Icons.lightbulb,
-                  primary,
-                  const FactsPage(),
-                ),
-                _quickCard(
-                  context,
-                  "Library",
-                  Icons.menu_book,
-                  green,
-                  const EncyclopediaPage(),
-                ),
+                _quickCard(context, "Facts", Icons.lightbulb, primary, const FactsPage()),
+                _quickCard(context, "Library", Icons.menu_book, green, const EncyclopediaPage()),
                 _quickCard(
                   context,
                   "AI Chat",
                   Icons.chat,
                   primary,
-                  ChatbotPage(
-                    breed: currentPet["breed"]!,
-                  ),
+                  ChatbotPage(breed: currentPet["breed"]!),
                 ),
-                _quickCard(
-                  context,
-                  "Smart Match",
-                  Icons.favorite,
-                  green,
-                  const SmartMatchPage(),
-                ),
+                _quickCard(context, "Smart Match", Icons.favorite, green, const SmartMatchPage()),
               ],
             ),
           ],
@@ -195,6 +216,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   Widget _quickCard(
       BuildContext context,
       String title,

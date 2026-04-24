@@ -1,35 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'notification_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({super.key});
+  final String? initialPayload;
+
+  const CalendarPage({super.key, this.initialPayload});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-
-  // 🎨 PET BREED AI WARM PALETTE
+  // 🎨 COLORS
   static const Color beige = Color(0xFFF5E6D3);
   static const Color warmBrown = Color(0xFF8B5E3C);
   static const Color softOrange = Color(0xFFF4A261);
-  static const Color greenAccent = Color(0xFF4CAF50);
+
+  final supabase = Supabase.instance.client;
 
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime _selectedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
 
-  final Map<DateTime, List<String>> _appointments = {};
+  Map<DateTime, List<Map<String, dynamic>>> _appointments = {};
 
-  List<String> _getAppointmentsForDay(DateTime day) {
-    return _appointments[DateTime(day.year, day.month, day.day)] ?? [];
+  DateTime _normalize(DateTime day) =>
+      DateTime(day.year, day.month, day.day);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadAppointments();
+
+    /// 🔔 HANDLE NOTIFICATION CLICK
+    if (widget.initialPayload != null) {
+      final parts = widget.initialPayload!.split('|');
+      final date = DateTime.parse(parts[0]);
+
+      _selectedDay = date;
+      _focusedDay = date;
+
+      /// refresh UI after navigation
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _loadAppointments();
+      });
+    }
   }
 
-  void _addAppointment() async {
-    if (_selectedDay == null) return;
+  /// 🔄 LOAD FROM SUPABASE
+  Future<void> _loadAppointments() async {
+    try {
+      final data = await supabase.from('appointments').select();
 
+      _appointments.clear();
+
+      for (var item in data) {
+        if (item['datetime'] == null) continue;
+
+        final dt = DateTime.parse(item['datetime']);
+        final key = _normalize(dt);
+
+        _appointments.putIfAbsent(key, () => []);
+        _appointments[key]!.add(item);
+      }
+
+      setState(() {});
+    } catch (e) {
+      print("❌ Load Error: $e");
+    }
+  }
+
+  List<Map<String, dynamic>> _getAppointmentsForDay(DateTime day) {
+    return _appointments[_normalize(day)] ?? [];
+  }
+
+  /// 🔔 ADD APPOINTMENT
+  void _addAppointment() async {
     TextEditingController controller = TextEditingController();
+    TimeOfDay? selectedTime;
 
     await showDialog(
       context: context,
@@ -37,43 +88,117 @@ class _CalendarPageState extends State<CalendarPage> {
         return AlertDialog(
           backgroundColor: beige,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)),
-          title: const Text(
-            "Book Appointment 🐾",
-            style: TextStyle(color: warmBrown),
+            borderRadius: BorderRadius.circular(18),
           ),
-          content: TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              hintText: "Enter appointment (Vet, Grooming...)",
-              hintStyle: TextStyle(color: Colors.brown),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: warmBrown)),
+          title: const Text(
+            "Add Appointment 🐾",
+            style: TextStyle(
+              color: warmBrown,
+              fontWeight: FontWeight.bold,
             ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  hintText: "Enter appointment",
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: softOrange,
+                ),
+                onPressed: () async {
+                  selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                },
+                child: const Text("Select Time"),
+              ),
+            ],
           ),
           actions: [
             TextButton(
+              onPressed: () => Navigator.pop(context),
               child: const Text("Cancel",
                   style: TextStyle(color: warmBrown)),
-              onPressed: () => Navigator.pop(context),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: softOrange,
               ),
-              child: const Text("Save"),
-              onPressed: () {
-                final dayKey = DateTime(
-                    _selectedDay!.year,
-                    _selectedDay!.month,
-                    _selectedDay!.day);
+              onPressed: () async {
+                String text = controller.text.trim();
 
-                _appointments.putIfAbsent(dayKey, () => []);
-                _appointments[dayKey]!.add(controller.text);
+                if (text.isEmpty || selectedTime == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text("Enter text & select time")),
+                  );
+                  return;
+                }
 
-                setState(() {});
+                final DateTime fullDateTime = DateTime(
+                  _selectedDay.year,
+                  _selectedDay.month,
+                  _selectedDay.day,
+                  selectedTime!.hour,
+                  selectedTime!.minute,
+                );
+
+                /// ☁️ SAVE TO SUPABASE
+                try {
+                  await supabase.from('appointments').insert({
+                    'title': text,
+                    'datetime': fullDateTime.toIso8601String(),
+                  });
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Error: $e")),
+                  );
+                  return;
+                }
+
+                /// 🔔 NOTIFICATION
+                await NotificationService.scheduleNotification(
+                  id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
+                  title: "Pet Appointment 🐾",
+                  body: text,
+                  scheduledTime: fullDateTime,
+                  payload:
+                  "${fullDateTime.toIso8601String()}|$text",
+                );
+
+                /// ⏰ REMINDER
+                await NotificationService.scheduleNotification(
+                  id: DateTime.now().millisecondsSinceEpoch ~/ 1000 + 1,
+                  title: "Reminder ⏰",
+                  body: "$text in 10 minutes",
+                  scheduledTime:
+                  fullDateTime.subtract(const Duration(minutes: 10)),
+                  payload:
+                  "${fullDateTime.toIso8601String()}|$text",
+                );
+
+                await _loadAppointments();
+
                 Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text("Appointment Saved 🔔")),
+                );
               },
+              child: const Text("Save"),
             ),
           ],
         );
@@ -81,142 +206,87 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
+  /// 🗑 DELETE
+  void _deleteAppointment(String id) async {
+    await supabase.from('appointments').delete().eq('id', id);
+
+    await _loadAppointments();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Deleted")),
+    );
+  }
+
+  /// ⏰ FORMAT TIME
+  String _formatDateTime(String iso) {
+    final dt = DateTime.parse(iso);
+    final time = TimeOfDay.fromDateTime(dt);
+    return "${dt.day}/${dt.month}/${dt.year} - ${time.format(context)}";
+  }
+
   @override
   Widget build(BuildContext context) {
-
     final selectedAppointments =
-    _selectedDay == null ? [] : _getAppointmentsForDay(_selectedDay!);
+    _getAppointmentsForDay(_selectedDay);
 
     return Scaffold(
       backgroundColor: beige,
       appBar: AppBar(
         title: const Text("Pet Schedule 🐶"),
         backgroundColor: warmBrown,
-        foregroundColor: Colors.white,
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: softOrange,
-        onPressed: _addAppointment,
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 70),
+        child: FloatingActionButton(
+          onPressed: _addAppointment,
+          backgroundColor: softOrange,
+          child: const Icon(Icons.add),
+        ),
       ),
       body: Column(
         children: [
-
-          /// CALENDAR
           TableCalendar(
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2030, 12, 31),
+            firstDay: DateTime.utc(2020),
+            lastDay: DateTime.utc(2035),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             selectedDayPredicate: (day) =>
-                isSameDay(_selectedDay, day),
-            eventLoader: _getAppointmentsForDay,
+                isSameDay(day, _selectedDay),
+
+            /// 🔵 SHOW DOTS
+            eventLoader: (day) =>
+                _getAppointmentsForDay(day),
+
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
             },
-            onFormatChanged: (format) {
-              setState(() {
-                _calendarFormat = format;
-              });
-            },
-            calendarStyle: const CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: softOrange,
-                shape: BoxShape.circle,
-              ),
-              selectedDecoration: BoxDecoration(
-                color: greenAccent,
-                shape: BoxShape.circle,
-              ),
-              markerDecoration: BoxDecoration(
-                color: warmBrown,
-                shape: BoxShape.circle,
-              ),
-              defaultTextStyle:
-              TextStyle(color: warmBrown),
-              weekendTextStyle:
-              TextStyle(color: Colors.brown),
-            ),
-            headerStyle: const HeaderStyle(
-              formatButtonTextStyle:
-              TextStyle(color: Colors.white),
-              formatButtonDecoration: BoxDecoration(
-                color: softOrange,
-                borderRadius:
-                BorderRadius.all(Radius.circular(12)),
-              ),
-              titleTextStyle: TextStyle(
-                  color: warmBrown,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-              leftChevronIcon:
-              Icon(Icons.chevron_left,
-                  color: warmBrown),
-              rightChevronIcon:
-              Icon(Icons.chevron_right,
-                  color: warmBrown),
-            ),
-            daysOfWeekStyle: const DaysOfWeekStyle(
-              weekdayStyle:
-              TextStyle(color: warmBrown),
-              weekendStyle:
-              TextStyle(color: Colors.brown),
-            ),
           ),
 
-          const SizedBox(height: 10),
-
-          /// APPOINTMENT LIST
           Expanded(
             child: selectedAppointments.isEmpty
                 ? const Center(
-              child: Text(
-                "No Appointments 🐾",
-                style: TextStyle(
-                    color: warmBrown,
-                    fontSize: 16),
-              ),
-            )
+                child: Text("No Appointments 🐾"))
                 : ListView.builder(
               itemCount: selectedAppointments.length,
               itemBuilder: (context, index) {
-                return Card(
-                  color: Colors.white,
-                  margin: const EdgeInsets.all(8),
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(15)),
-                  child: ListTile(
-                    title: Text(
-                      selectedAppointments[index],
-                      style: const TextStyle(
-                          color: warmBrown),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.delete,
-                        color: greenAccent,
-                      ),
-                      onPressed: () {
-                        final dayKey = DateTime(
-                            _selectedDay!.year,
-                            _selectedDay!.month,
-                            _selectedDay!.day);
+                final item = selectedAppointments[index];
 
-                        _appointments[dayKey]!
-                            .removeAt(index);
-
-                        setState(() {});
-                      },
-                    ),
+                return ListTile(
+                  title: Text(item['title'] ?? ''),
+                  subtitle:
+                  Text(_formatDateTime(item['datetime'])),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () =>
+                        _deleteAppointment(item['id'].toString()),
                   ),
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );

@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")   // ✅ Firebase plugin
     id("dev.flutter.flutter-gradle-plugin")
 }
 
@@ -13,6 +12,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+
+        // ✅ REQUIRED FOR NOTIFICATIONS
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -35,11 +37,8 @@ android {
 }
 
 dependencies {
-    // 🔥 Firebase BOM
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-
-    // 🔥 Firebase Analytics
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    // ✅ REQUIRED FOR flutter_local_notifications
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }
 
 flutter {

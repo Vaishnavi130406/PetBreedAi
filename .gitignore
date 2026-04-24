@@ -1,4 +1,6 @@
+# -------------------------
 # Miscellaneous
+# -------------------------
 *.class
 *.log
 *.pyc
@@ -12,17 +14,20 @@
 .swiftpm/
 migrate_working_dir/
 
-# IntelliJ / Android Studio
+# -------------------------
+# IDEs
+# -------------------------
 *.iml
 *.ipr
 *.iws
 .idea/
-
-# VS Code
 .vscode/
 
-# Flutter/Dart
+# -------------------------
+# Flutter / Dart
+# -------------------------
 .dart_tool/
+.flutter-plugins
 .flutter-plugins-dependencies
 .metadata
 .pub-cache/
@@ -30,15 +35,38 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# -------------------------
 # Flutter build files
+# -------------------------
 **/doc/api/
 **/ios/Flutter/.last_build_id
 
+# -------------------------
 # Android
+# -------------------------
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.gradle/
 android/local.properties
+*.keystore
+*.jks
 
-# Env files (IMPORTANT)
+# -------------------------
+# iOS
+# -------------------------
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+
+# -------------------------
+# macOS
+# -------------------------
+/macos/Pods/
+/macos/Flutter/ephemeral/
+
+# -------------------------
+# Environment files (VERY IMPORTANT)
+# -------------------------
 .env

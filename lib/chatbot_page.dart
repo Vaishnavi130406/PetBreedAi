@@ -22,8 +22,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
   static const Color warmBrown = Color(0xFF8B5E3C);
   static const Color softOrange = Color(0xFFF4A261);
 
-  /// BREED DATABASE
+  /// BREED DATABASE (UPDATED ALL 35)
   final Map<String, Map<String, String>> breedDatabase = {
+
+    // 🐶 DOGS
     "labrador": buildBreedData(
         lifespan: "10–12 years",
         temperament: "Friendly, outgoing and loyal.",
@@ -31,19 +33,19 @@ class _ChatbotPageState extends State<ChatbotPage> {
         grooming: "Weekly brushing.",
         health: "Hip and elbow dysplasia risk."),
 
-    "golden retriever": buildBreedData(
-        lifespan: "10–12 years",
-        temperament: "Gentle, intelligent and loving.",
-        energy: "High energy.",
-        grooming: "Frequent brushing required.",
-        health: "Joint and heart issues."),
-
     "german shepherd": buildBreedData(
         lifespan: "9–13 years",
         temperament: "Confident, protective and smart.",
         energy: "Very active.",
         grooming: "Heavy shedding.",
         health: "Hip dysplasia common."),
+
+    "golden retriever": buildBreedData(
+        lifespan: "10–12 years",
+        temperament: "Gentle, intelligent and loving.",
+        energy: "High energy.",
+        grooming: "Frequent brushing required.",
+        health: "Joint and heart issues."),
 
     "bulldog": buildBreedData(
         lifespan: "8–10 years",
@@ -59,6 +61,49 @@ class _ChatbotPageState extends State<ChatbotPage> {
         grooming: "Low grooming.",
         health: "Back problems common."),
 
+    "poodle": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Highly intelligent and active.",
+        energy: "High energy.",
+        grooming: "Regular grooming required.",
+        health: "Eye and joint issues."),
+
+    "jack russell terrier": buildBreedData(
+        lifespan: "13–16 years",
+        temperament: "Energetic, bold, lively.",
+        energy: "Very high energy.",
+        grooming: "Low grooming.",
+        health: "Hyperactivity and joint issues."),
+
+    "border collie": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Extremely intelligent and hardworking.",
+        energy: "Very high energy.",
+        grooming: "Weekly brushing.",
+        health: "Eye problems."),
+
+    "bernese mountain dog": buildBreedData(
+        lifespan: "7–10 years",
+        temperament: "Gentle, affectionate.",
+        energy: "Moderate.",
+        grooming: "Heavy shedding.",
+        health: "Cancer risk."),
+
+    "chihuahua": buildBreedData(
+        lifespan: "12–20 years",
+        temperament: "Alert and lively.",
+        energy: "Low.",
+        grooming: "Low grooming.",
+        health: "Dental issues."),
+
+    "corgi": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Playful and smart.",
+        energy: "Moderate.",
+        grooming: "Heavy shedding.",
+        health: "Back issues."),
+
+    // 🐱 CATS
     "persian": buildBreedData(
         lifespan: "12–17 years",
         temperament: "Calm and affectionate.",
@@ -94,6 +139,105 @@ class _ChatbotPageState extends State<ChatbotPage> {
         grooming: "Moderate grooming.",
         health: "Generally healthy."),
 
+    "maine coon": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Gentle giant.",
+        energy: "Moderate.",
+        grooming: "Heavy grooming.",
+        health: "Heart issues."),
+
+    "bengal": buildBreedData(
+        lifespan: "12–16 years",
+        temperament: "Active and wild.",
+        energy: "High.",
+        grooming: "Low grooming.",
+        health: "Hyperactivity."),
+
+    "abyssinian": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Curious and playful.",
+        energy: "High.",
+        grooming: "Low grooming.",
+        health: "Dental issues."),
+
+    "sphynx": buildBreedData(
+        lifespan: "8–14 years",
+        temperament: "Affectionate.",
+        energy: "Moderate.",
+        grooming: "Skin care needed.",
+        health: "Skin issues."),
+
+    "scottish fold": buildBreedData(
+        lifespan: "11–14 years",
+        temperament: "Calm and sweet.",
+        energy: "Low.",
+        grooming: "Low grooming.",
+        health: "Joint issues."),
+
+    "russian blue": buildBreedData(
+        lifespan: "15–20 years",
+        temperament: "Quiet and gentle.",
+        energy: "Moderate.",
+        grooming: "Low grooming.",
+        health: "Healthy breed."),
+
+    "exotic shorthair": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Calm and loving.",
+        energy: "Low.",
+        grooming: "Moderate grooming.",
+        health: "Breathing issues."),
+
+    "birman": buildBreedData(
+        lifespan: "12–16 years",
+        temperament: "Gentle and affectionate.",
+        energy: "Moderate.",
+        grooming: "Weekly brushing.",
+        health: "Healthy."),
+
+    "burmese": buildBreedData(
+        lifespan: "12–18 years",
+        temperament: "Social and playful.",
+        energy: "Moderate.",
+        grooming: "Low grooming.",
+        health: "Diabetes risk."),
+
+    "himalayan": buildBreedData(
+        lifespan: "9–15 years",
+        temperament: "Calm.",
+        energy: "Low.",
+        grooming: "Daily grooming.",
+        health: "Respiratory issues."),
+
+    "bombay": buildBreedData(
+        lifespan: "12–16 years",
+        temperament: "Playful.",
+        energy: "Moderate.",
+        grooming: "Low grooming.",
+        health: "Healthy."),
+
+    "norwegian forest cat": buildBreedData(
+        lifespan: "14–16 years",
+        temperament: "Independent.",
+        energy: "Moderate.",
+        grooming: "Heavy grooming.",
+        health: "Joint issues."),
+
+    "oriental shorthair": buildBreedData(
+        lifespan: "12–15 years",
+        temperament: "Talkative.",
+        energy: "High.",
+        grooming: "Low grooming.",
+        health: "Dental issues."),
+
+    "devon rex": buildBreedData(
+        lifespan: "10–15 years",
+        temperament: "Mischievous.",
+        energy: "High.",
+        grooming: "Low grooming.",
+        health: "Skin issues."),
+
+    // 🦜 BIRDS
     "amazon green parrot": buildBreedData(
         lifespan: "40–60 years",
         temperament: "Social and talkative.",
@@ -122,6 +266,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
         grooming: "Feather care required.",
         health: "Needs social interaction."),
 
+    // 🐢
     "turtle": buildBreedData(
         lifespan: "20–80 years",
         temperament: "Quiet and calm.",
@@ -148,6 +293,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
     };
   }
 
+// ✅ REST CODE SAME (UNCHANGED)
   @override
   void initState() {
     super.initState();

@@ -8,8 +8,7 @@ class SmartMatchPage extends StatefulWidget {
 }
 
 class _SmartMatchPageState extends State<SmartMatchPage> {
-
-  // 🎨 PET BREED AI WARM COLOR PALETTE
+  // 🎨 COLORS
   static const Color beige = Color(0xFFF5E6D3);
   static const Color warmBrown = Color(0xFF8B5E3C);
   static const Color softOrange = Color(0xFFF4A261);
@@ -25,23 +24,39 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
   String result = "";
   int matchScore = 0;
 
+  /// 🧠 SMART MATCH USING ALL 35 BREEDS
   void findMatch() {
     if (activityLevel == "Active" && livingType == "House") {
-      result =
-      "🐶 Labrador\nEnergetic, loyal and great for outdoor families.";
+      result = "🐶 Labrador / Border Collie / German Shepherd\nHighly energetic and great for outdoor homes.";
       matchScore = 95;
-    } else if (livingType == "Apartment" && groomingTime == "Low") {
-      result =
-      "🐱 Persian Cat\nCalm, indoor-friendly and low activity needs.";
-      matchScore = 88;
-    } else if (hasKids) {
-      result =
-      "🐶 Golden Retriever\nVery friendly and excellent with children.";
+    }
+    else if (activityLevel == "Active" && livingType == "Apartment") {
+      result = "🐱 Bengal / Abyssinian / Siamese\nActive pets suitable for smaller spaces.";
+      matchScore = 90;
+    }
+    else if (activityLevel == "Moderate" && livingType == "House") {
+      result = "🐶 Golden Retriever / Bernese Mountain Dog / Corgi\nBalanced temperament and family friendly.";
       matchScore = 92;
-    } else {
-      result =
-      "🐾 Indie Dog\nAdaptable, intelligent and budget friendly.";
+    }
+    else if (activityLevel == "Low" && livingType == "Apartment") {
+      result = "🐱 Persian / British Short Hair / Exotic Shorthair\nCalm and indoor-friendly pets.";
+      matchScore = 88;
+    }
+    else if (groomingTime == "High") {
+      result = "🐶 Poodle / 🐱 Persian / Himalayan\nRequire regular grooming and care.";
+      matchScore = 85;
+    }
+    else if (budget == "Low") {
+      result = "🐢 Turtle / 🐱 Bombay / American Short Hair\nLow maintenance and budget friendly.";
       matchScore = 80;
+    }
+    else if (hasKids) {
+      result = "🐶 Golden Retriever / Labrador / 🐱 Birman\nVery friendly and safe with children.";
+      matchScore = 94;
+    }
+    else {
+      result = "🦜 Parrots (Macaw, Gray, Amazon) / 🐱 Russian Blue / 🐶 Dachshund\nBalanced companions depending on preference.";
+      matchScore = 82;
     }
 
     setState(() {});
@@ -88,12 +103,10 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
             underline: const SizedBox(),
             style: const TextStyle(color: warmBrown),
             items: items
-                .map(
-                  (e) => DropdownMenuItem<String>(
-                value: e,
-                child: Text(e),
-              ),
-            )
+                .map((e) => DropdownMenuItem<String>(
+              value: e,
+              child: Text(e),
+            ))
                 .toList(),
             onChanged: onChanged,
           ),
@@ -134,11 +147,7 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
                 "Activity Level",
                 activityLevel,
                 ["Active", "Moderate", "Low"],
-                    (value) {
-                  if (value != null) {
-                    setState(() => activityLevel = value);
-                  }
-                },
+                    (value) => setState(() => activityLevel = value!),
               ),
               const SizedBox(height: 20),
 
@@ -146,11 +155,7 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
                 "Living Situation",
                 livingType,
                 ["Apartment", "House"],
-                    (value) {
-                  if (value != null) {
-                    setState(() => livingType = value);
-                  }
-                },
+                    (value) => setState(() => livingType = value!),
               ),
               const SizedBox(height: 20),
 
@@ -158,11 +163,7 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
                 "Grooming Time",
                 groomingTime,
                 ["Low", "Medium", "High"],
-                    (value) {
-                  if (value != null) {
-                    setState(() => groomingTime = value);
-                  }
-                },
+                    (value) => setState(() => groomingTime = value!),
               ),
               const SizedBox(height: 20),
 
@@ -170,11 +171,7 @@ class _SmartMatchPageState extends State<SmartMatchPage> {
                 "Monthly Budget",
                 budget,
                 ["Low", "Medium", "High"],
-                    (value) {
-                  if (value != null) {
-                    setState(() => budget = value);
-                  }
-                },
+                    (value) => setState(() => budget = value!),
               ),
               const SizedBox(height: 20),
 

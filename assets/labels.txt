@@ -1,13 +1,33 @@
 Labrador
-Golden Retriever
 German Shepherd
+Golden Retriever
 Bulldog
 Dachshund
+Poodle
+Jack Russell Terrier
+Border Collie
+Bernese Mountain Dog
+Chihuahua
+Corgi
 Persian
 Siamese
 American Short Hair
 British Short Hair
 VanKedisi
+Maine Coon
+Bengal
+Abyssinian
+Sphynx
+Scottish Fold
+Russian Blue
+Exotic Shorthair
+Birman
+Burmese
+Himalayan
+Bombay
+Norwegian Forest Cat
+Oriental Shorthair
+Devon Rex
 Amazon Green Parrot
 Gray Parrot
 Macaw
